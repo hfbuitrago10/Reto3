@@ -211,6 +211,78 @@ def artistsSize(analyzer):
     """
     return mp.size(analyzer['artists'])
 
+def getEventsByRange(analyzer, feature, initialValue, finalValue):
+    """
+    Retorna el número de eventos y artistas por característica de contenido
+    en un rango de valores
+    """
+    artists = mp.newMap(maptype='PROBING')
+    totalevents = 0
+    lst = om.values(analyzer[feature], initialValue, finalValue)
+    for lstevents in lt.iterator(lst):
+        totalevents += lt.size(lstevents['events'])
+        for event in lt.iterator(lstevents['events']):
+            artist = event['artist_id']
+            mp.put(artists, artist, event)
+    totalartists = mp.size(artists)
+    return totalevents, totalartists
+
+def getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
+    """
+    Retorna el número de pistas y el map de pistas para las características
+    de contenido energy y danceability en un rango de valores
+    """
+    map = om.newMap('RBT', compareValues)
+    lstenergy = om.values(analyzer['energy'], initialValue1, finalValue1)
+    for lstevents in lt.iterator(lstenergy):
+        for event in lt.iterator(lstevents['events']):
+            key = float(event['danceability'])
+            existkey = om.contains(map, key)
+            if existkey:
+                entry = om.get(map, key)
+                value = me.getValue(entry)
+            else:
+                value = newValue(key)
+                om.put(map, key, value)
+            lt.addLast(value['events'], event)
+
+    tracks = mp.newMap(maptype='PROBING')
+    lstdanceability = om.values(map, initialValue2, finalValue2)
+    for lstevents in lt.iterator(lstdanceability):
+        for event in lt.iterator(lstevents['events']):
+            track = event['track_id']
+            mp.put(tracks, track, event)
+    totaltracks = mp.size(tracks)
+    return totaltracks, tracks
+
+def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
+    """
+    Retorna el número de pistas y el map de pistas para las características
+    de contenido instrumentalness y tempo en un rango de valores
+    """
+    map = om.newMap('RBT', compareValues)
+    lstinstrumentalness = om.values(analyzer['instrumentalness'], initialValue1, finalValue1)
+    for lstevents in lt.iterator(lstinstrumentalness):
+        for event in lt.iterator(lstevents['events']):
+            key = float(event['tempo'])
+            existkey = om.contains(map, key)
+            if existkey:
+                entry = om.get(map, key)
+                value = me.getValue(entry)
+            else:
+                value = newValue(key)
+                om.put(map, key, value)
+            lt.addLast(value['events'], event)
+
+    tracks = mp.newMap(maptype='PROBING')
+    lsttempo = om.values(map, initialValue2, finalValue2)
+    for lstevents in lt.iterator(lsttempo):
+        for event in lt.iterator(lstevents['events']):
+            track = event['track_id']
+            mp.put(tracks, track, event)
+    totaltracks = mp.size(tracks)
+    return totaltracks, tracks
+
 # Funciones de comparación
 
 def compareValues(value1, value2):

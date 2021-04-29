@@ -98,3 +98,24 @@ def artistsSize(analyzer):
     analizador
     """
     return model.artistsSize(analyzer)
+
+def getEventsByRange(analyzer, feature, initialValue, finalValue):
+    """
+    Retorna el número de eventos y artistas por característica de contenido
+    en un rango de valores
+    """
+    return model.getEventsByRange(analyzer, feature, initialValue, finalValue)
+
+def getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
+    """
+    Retorna el número de pistas y el map de pistas para las características
+    de contenido energy y danceability en un rango de valores
+    """
+    return model.getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initialValue2, finalValue2)
+
+def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
+    """
+    Retorna el número de pistas y el map de pistas para las características
+    de contenido instrumentalness y tempo en un rango de valores
+    """
+    return model.getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2)
