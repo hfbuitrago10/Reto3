@@ -33,6 +33,43 @@ assert cf
 La vista se encarga de la interacción con el usuario
 """
 
+# Funciones para la impresión de resultados
+
+def printFirstFiveEvents(analyzer):
+    """
+    Imprime la información de los primeros 5 eventos cargados
+    en el analizador
+    """
+    index = 1
+    print("Los primeros 5 eventos cargados son: \n")
+    while index <= 5:
+        event = lt.getElement(analyzer['events'], index)
+        print("Track " + str(index) + ": " + str(event['track_id']) + "  Instrumentalness: " +
+        str(event['instrumentalness']) + "  Liveness: " + str(event['liveness']) + "  Speechiness: " +
+        str(event['speechiness']) + "  Danceability: " + str(event['danceability']) + "  Valence: " + 
+        str(event['valence']) + "  Loudness: " + str(event['loudness']) + "  Tempo: " + str(event['tempo']) +
+        "  Acousticness: " + str(event['acousticness']) + "  Energy: " + str(event['energy']))
+        index += 1
+    print()
+
+def printLastFiveEvents(analyzer):
+    """
+    Imprime la información de los últimos 5 eventos cargados
+    en el analizador
+    """
+    size = lt.size(analyzer['events'])
+    index = size - 4
+    print("Los últimos 5 eventos cargados son: \n")
+    while index <= size:
+        event = lt.getElement(analyzer['events'], index)
+        print("Track " + str(index) + ": " + str(event['track_id']) + "  Instrumentalness: " +
+        str(event['instrumentalness']) + "  Liveness: " + str(event['liveness']) + "  Speechiness: " +
+        str(event['speechiness']) + "  Danceability: " + str(event['danceability']) + "  Valence: " + 
+        str(event['valence']) + "  Loudness: " + str(event['loudness']) + "  Tempo: " + str(event['tempo']) +
+        "  Acousticness: " + str(event['acousticness']) + "  Energy: " + str(event['energy']))
+        index += 1
+    print()
+
 # Menú de opciones
 
 def printMenu():
@@ -80,6 +117,8 @@ while True:
         print("\nTotal de eventos cargados: " + str(controller.eventsSize(analyzer)))
         print("Total de artistas cargados: " + str(controller.artistsSize(analyzer)))
         print("Total de pistas cargadas: " + str(controller.tracksSize(analyzer)) + "\n")
+        printFirstFiveEvents(analyzer)
+        printLastFiveEvents(analyzer)
 
     elif int(inputs[0]) == 3:
         pass
