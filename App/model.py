@@ -139,8 +139,8 @@ def addArtists(analyzer, event):
 
 def addContentFeature(analyzer, event, feature):
     """
-    Adiciona un evento a la lista de eventos de una caracteristica de
-    contenido específica, las caracteristicas de contenido se
+    Adiciona un evento a la lista de eventos de una característica de
+    contenido específica, las características de contenido se
     guardan en un árbol tipo 'RBT'
     """
     map = analyzer[feature]
@@ -232,12 +232,13 @@ def getEventsByRange(analyzer, feature, initialValue, finalValue):
             artist = event['artist_id']
             mp.put(artists, artist, event)
     totalartists = mp.size(artists)
-    return totalevents, totalartists
+    artistsids = mp.keySet(artists)
+    return totalevents, totalartists, artistsids
 
 def getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
     """
     Retorna el número de pistas y el map de pistas para las características
-    de contenido energy y danceability en un rango de valores
+    de contenido 'energy' y 'danceability' en un rango de valores
     """
     map = om.newMap('RBT', compareValues)
     lstenergy = om.values(analyzer['energy'], initialValue1, finalValue1)
@@ -265,7 +266,7 @@ def getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initi
 def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2):
     """
     Retorna el número de pistas y el map de pistas para las características
-    de contenido instrumentalness y tempo en un rango de valores
+    de contenido 'instrumentalness' y 'tempo' en un rango de valores
     """
     map = om.newMap('RBT', compareValues)
     lstinstrumentalness = om.values(analyzer['instrumentalness'], initialValue1, finalValue1)
@@ -289,6 +290,24 @@ def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, in
             mp.put(tracks, track, event)
     totaltracks = mp.size(tracks)
     return totaltracks, tracks
+
+def getGenres(analyzer):
+    """
+    Adiciona una entrada al map de géneros, donde la llave es el género y
+    el valor es una tupla con el número de eventos, el número de
+    artistas únicos y los id de los artistas 
+    """
+    genres = mp.newMap(maptype='PROBING')
+    mp.put(genres, 'Reggae', getEventsByRange(analyzer, 'tempo', 60.0, 90.0))
+    mp.put(genres, 'Down-tempo', getEventsByRange(analyzer, 'tempo', 70.0, 100.0))
+    mp.put(genres, 'Chill-out', getEventsByRange(analyzer, 'tempo', 90.0, 120.0))
+    mp.put(genres, 'Hip-hop', getEventsByRange(analyzer, 'tempo', 85.0, 115.0))
+    mp.put(genres, 'Jazz and Funk', getEventsByRange(analyzer, 'tempo', 120.0, 125.0))
+    mp.put(genres, 'Pop', getEventsByRange(analyzer, 'tempo', 100.0, 130.0))
+    mp.put(genres, 'R&B', getEventsByRange(analyzer, 'tempo', 60.0, 80.0))
+    mp.put(genres, 'Rock', getEventsByRange(analyzer, 'tempo', 110.0, 140.0))
+    mp.put(genres, 'Metal', getEventsByRange(analyzer, 'tempo', 100.0, 160.0))
+    return genres
 
 # Funciones de comparación
 
