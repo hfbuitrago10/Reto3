@@ -39,6 +39,7 @@ def newAnalyzer():
     Inicializa el analizador de eventos
     """
     analyzer = {'events': None,
+                'event': None,
                 'tracks': None,
                 'artists': None,
                 'instrumentalness': None,
@@ -55,13 +56,14 @@ def newAnalyzer():
                 'vaders': None}
     
     """
-    Se crea una lista para guardar los eventos
+    Se crea una lista vacía para guardar los eventos
     """
     analyzer['events'] = lt.newList('ARRAY_LIST')
 
     """
     Se crean maps para acceder a la información de los eventos
     """
+    analyzer['event'] = mp.newMap(maptype='PROBING')
     analyzer['tracks'] = mp.newMap(maptype='PROBING')
     analyzer['artists'] = mp.newMap(maptype='PROBING')
     analyzer['instrumentalness'] = om.newMap('RBT', compareValues)
@@ -83,20 +85,25 @@ def newAnalyzer():
 
 def addEvent(analyzer, event):
     """
-    Adiciona un evento a la lista de eventos
+    Adiciona un evento a la lista de eventos, adicionalmente crea
+    entradas en los maps por característica de contenido
     """
-    lt.addLast(analyzer['events'], event)
-    addTracks(analyzer, event)
-    addArtists(analyzer, event)
-    addContentFeature(analyzer, event, 'instrumentalness')
-    addContentFeature(analyzer, event, 'liveness')
-    addContentFeature(analyzer, event, 'speechiness')
-    addContentFeature(analyzer, event, 'danceability')
-    addContentFeature(analyzer, event, 'valence')
-    addContentFeature(analyzer, event, 'loudness')
-    addContentFeature(analyzer, event, 'tempo')
-    addContentFeature(analyzer, event, 'acousticness')
-    addContentFeature(analyzer, event, 'energy')
+    key = event['user_id'] + event['track_id'] + event['created_at']
+    existevent = mp.contains(analyzer['event'], key)
+    if existevent == False:
+        lt.addLast(analyzer['events'], event)
+        mp.put(analyzer['event'], key, event)
+        addTracks(analyzer, event)
+        addArtists(analyzer, event)
+        addContentFeature(analyzer, event, 'instrumentalness')
+        addContentFeature(analyzer, event, 'liveness')
+        addContentFeature(analyzer, event, 'speechiness')
+        addContentFeature(analyzer, event, 'danceability')
+        addContentFeature(analyzer, event, 'valence')
+        addContentFeature(analyzer, event, 'loudness')
+        addContentFeature(analyzer, event, 'tempo')
+        addContentFeature(analyzer, event, 'acousticness')
+        addContentFeature(analyzer, event, 'energy')
 
 def addTracks(analyzer, event):
     """
