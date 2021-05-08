@@ -120,8 +120,8 @@ def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, in
     """
     return model.getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2)
 
-def getGenres(analyzer):
+def getGenres(analyzer, key, initialValue, finalValue, option):
     """
     Retorna el map de géneros
     """
-    return model.getGenres(analyzer)
+    return model.getGenres(analyzer, key, initialValue, finalValue, option)

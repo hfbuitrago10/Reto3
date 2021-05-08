@@ -291,7 +291,7 @@ def getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, in
     totaltracks = mp.size(tracks)
     return totaltracks, tracks
 
-def getGenres(analyzer):
+def getGenres(analyzer, key, initialValue, finalValue, option):
     """
     Adiciona una entrada al map de géneros, donde la llave es el género y
     el valor es una tupla con el número de eventos, el número de
@@ -307,6 +307,8 @@ def getGenres(analyzer):
     mp.put(genres, 'R&B', getEventsByRange(analyzer, 'tempo', 60.0, 80.0))
     mp.put(genres, 'Rock', getEventsByRange(analyzer, 'tempo', 110.0, 140.0))
     mp.put(genres, 'Metal', getEventsByRange(analyzer, 'tempo', 100.0, 160.0))
+    if option == True:
+        mp.put(genres, str(key), getEventsByRange(analyzer, 'tempo', initialValue, finalValue))
     return genres
 
 # Funciones de comparación

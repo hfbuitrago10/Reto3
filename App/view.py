@@ -42,14 +42,14 @@ def printFirstFiveEvents(analyzer):
     en el analizador
     """
     index = 1
-    print("Los primeros 5 eventos cargados son: ")
+    print("-------- Primeros 5 eventos cargados --------")
     while index <= 5:
         event = lt.getElement(analyzer['events'], index)
-        print("Track " + str(index) + ": " + str(event['track_id']) + "  Instrumentalness: " +
-        str(event['instrumentalness']) + "  Liveness: " + str(event['liveness']) + "  Speechiness: " +
-        str(event['speechiness']) + "  Danceability: " + str(event['danceability']) + "  Valence: " + 
-        str(event['valence']) + "  Loudness: " + str(event['loudness']) + "  Tempo: " + str(event['tempo']) +
-        "  Acousticness: " + str(event['acousticness']) + "  Energy: " + str(event['energy']))
+        print("Track " + str(index) + ": " + str(event['track_id']) + " | Instrumentalness: " +
+        str(event['instrumentalness']) + " | Liveness: " + str(event['liveness']) + " | Speechiness: " +
+        str(event['speechiness']) + " | Danceability: " + str(event['danceability']) + " | Valence: " + 
+        str(event['valence']) + " | Loudness: " + str(event['loudness']) + " | Tempo: " + str(event['tempo']) +
+        " | Acousticness: " + str(event['acousticness']) + " | Energy: " + str(event['energy']))
         index += 1
     print()
 
@@ -60,24 +60,25 @@ def printLastFiveEvents(analyzer):
     """
     size = lt.size(analyzer['events'])
     index = size - 4
-    print("Los últimos 5 eventos cargados son: ")
+    print("-------- Últimos 5 eventos cargados --------")
     while index <= size:
         event = lt.getElement(analyzer['events'], index)
-        print("Track " + str(index) + ": " + str(event['track_id']) + "  Instrumentalness: " +
-        str(event['instrumentalness']) + "  Liveness: " + str(event['liveness']) + "  Speechiness: " +
-        str(event['speechiness']) + "  Danceability: " + str(event['danceability']) + "  Valence: " + 
-        str(event['valence']) + "  Loudness: " + str(event['loudness']) + "  Tempo: " + str(event['tempo']) +
-        "  Acousticness: " + str(event['acousticness']) + "  Energy: " + str(event['energy']))
+        print("Track " + str(index) + ": " + str(event['track_id']) + " | Instrumentalness: " +
+        str(event['instrumentalness']) + " | Liveness: " + str(event['liveness']) + " | Speechiness: " +
+        str(event['speechiness']) + " | Danceability: " + str(event['danceability']) + " | Valence: " + 
+        str(event['valence']) + " | Loudness: " + str(event['loudness']) + " | Tempo: " + str(event['tempo']) +
+        " | Acousticness: " + str(event['acousticness']) + " | Energy: " + str(event['energy']))
         index += 1
     print()
 
 def printFiveRandomTracks(map, feature1, feature2):
     """
+    Imprime la información de 5 pistas aleatorias
     """
     index = 1
     size = mp.size(map)
     keys = mp.keySet(map)
-    print("5 pistas únicas aleatorias")
+    print("-------- 5 pistas aleatorias --------")
     while index <= 5:
         randomnumber = random.randint(1, size)
         key = lt.getElement(keys, randomnumber)
@@ -90,6 +91,7 @@ def printFiveRandomTracks(map, feature1, feature2):
 
 def printGenres(map, genres):
     """
+    Imprime las reproducciones y los artistas por género
     """
     totalevents = 0
     for index in range(len(genres)):
@@ -151,9 +153,9 @@ while True:
         print()
         print("Cargando información de los eventos....")
         data = loadData(analyzer)
-        print("\nTotal de eventos cargados: " + str(controller.eventsSize(analyzer)))
-        print("Total de artistas únicos cargados: " + str(controller.artistsSize(analyzer)))
-        print("Total de pistas únicas cargadas: " + str(controller.tracksSize(analyzer)) + "\n")
+        print("\nTotal eventos cargados: " + str(controller.eventsSize(analyzer)))
+        print("Total artistas únicos cargados: " + str(controller.artistsSize(analyzer)))
+        print("Total pistas únicas cargadas: " + str(controller.tracksSize(analyzer)) + "\n")
         printFirstFiveEvents(analyzer)
         printLastFiveEvents(analyzer)
 
@@ -164,9 +166,10 @@ while True:
         finalValue = float(input("Valor final: "))
         print("\nBuscando eventos en el rango....")
         events = controller.getEventsByRange(analyzer, feature, initialValue, finalValue)
-        print("\nPara " + str(feature) + " entre " + str(initialValue) + " y " + str(finalValue))
-        print("Total de eventos: " + str(events[0]))
-        print("Total de artistas únicos: " + str(events[1]) + "\n")
+        print("\n-------- " + str(feature) + " entre " + str(initialValue) + " y " + str(finalValue) +
+        " --------")
+        print("Total eventos: " + str(events[0]))
+        print("Total artistas únicos: " + str(events[1]) + "\n")
 
     elif int(inputs[0]) == 4:
         print()
@@ -178,9 +181,9 @@ while True:
         finalValue2 = float(input("Valor final: "))
         print("\nBuscando pistas en el rango....")
         tracks = controller.getEventsByEnergyAndDanceability(analyzer, initialValue1, finalValue1, initialValue2, finalValue2)
-        print("\nPara energy entre " + str(initialValue1) + " y " + str(finalValue1) + " y danceability entre " +
-        str(initialValue2) + " y " + str(finalValue2))
-        print("Total de pistas únicas: " + str(tracks[0]) + "\n")
+        print("\n-------- energy entre " + str(initialValue1) + " y " + str(finalValue1) + " y danceability entre " +
+        str(initialValue2) + " y " + str(finalValue2) + " --------")
+        print("Total pistas únicas: " + str(tracks[0]) + "\n")
         printFiveRandomTracks(tracks[1], 'energy', 'danceability')
 
     elif int(inputs[0]) == 5:
@@ -193,17 +196,28 @@ while True:
         finalValue2 = float(input("Valor final: "))
         print("\nBuscando pistas en el rango....")
         tracks = controller.getEventsByInstrumentalnessAndTempo(analyzer, initialValue1, finalValue1, initialValue2, finalValue2)
-        print("\nPara instrumentalness entre " + str(initialValue1) + " y " + str(finalValue1) + " y tempo entre " +
-        str(initialValue2) + " y " + str(finalValue2))
-        print("Total de pistas únicas: " + str(tracks[0]) + "\n")
+        print("\n-------- instrumentalness entre " + str(initialValue1) + " y " + str(finalValue1) + " y tempo entre " +
+        str(initialValue2) + " y " + str(finalValue2) + " --------")
+        print("Total pistas únicas: " + str(tracks[0]) + "\n")
         printFiveRandomTracks(tracks[1], 'instrumentalness', 'tempo')
 
     elif int(inputs[0]) == 6:
         print()
-        genreslst = str(input("Ingrese los géneros a consultar: "))
-        genres = genreslst.split(",")
-        genresmap = controller.getGenres(analyzer)
-        printGenres(genresmap, genres)
+        addgenre = bool(int(input("Desea agregar un género: \n1- Si\n0- No\n")))
+        if addgenre == True:
+            genrename = str(input("\nIngrese el nombre del género: "))
+            initialValue = float(input("Valor inicial: "))
+            finalValue = float(input("Valor final: "))
+            gendermap = controller.getGenres(analyzer, genrename, initialValue, finalValue, addgenre)
+            print("\nEl género " + str(genrename) + " ha sido agregado exitosamente\n")
+            genreslst = str(input("Ingrese los géneros a consultar: "))
+            genres = genreslst.split(",")
+            printGenres(gendermap, genres)
+        elif addgenre == False:
+            genreslst = str(input("\nIngrese los géneros a consultar: "))
+            genres = genreslst.split(",")
+            genresmap = controller.getGenres(analyzer, 'None', 0.00, 0.00, addgenre)
+            printGenres(genresmap, genres)
 
     elif int(inputs[0]) == 7:
         pass
