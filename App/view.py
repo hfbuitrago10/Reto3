@@ -109,6 +109,36 @@ def printGenres(map, genres):
             position += 1
     print("\nTotal reproducciones: " + str(totalevents) + "\n")
 
+def printTotalEvents(events):
+    """
+    """
+    index = 1
+    map = events[0]
+    genres = controller.getEventsByGenre(map)
+    keys = om.keySet(genres)
+    totalevents = 0
+    while index <= int(om.size(genres)):
+        tracks = lt.getElement(keys, index)
+        totalevents += int(tracks)
+        index += 1
+    return totalevents
+
+def printTopGenres(events):
+    """
+    """
+    index = 1
+    map = events[0]
+    genres = controller.getEventsByGenre(map)
+    keys = om.keySet(genres)
+    values = om.valueSet(genres)
+    print("\n-------- Reproducciones por género --------")
+    while index <= int(om.size(genres)):
+        genre = lt.getElement(values, index)
+        tracks = lt.getElement(keys, index)
+        print("Top " + str(index) + ": " + str(genre[0]) + " con " + str(tracks) + " reproducciones")
+        index += 1
+    print()
+
 # Menú de opciones
 
 def printMenu():
@@ -220,7 +250,14 @@ while True:
             printGenres(genresmap, genres)
 
     elif int(inputs[0]) == 7:
-        pass
+        print()
+        print("Ingrese los valores de tiempo")
+        initialValue = str(input("Valor inicial: "))
+        finalValue = str(input("Valor final: "))
+        events = controller.getEventsByTimeRange(analyzer, initialValue, finalValue)
+        print("\n-------- Entre " + str(initialValue) + " y " + str(finalValue) + " --------")
+        print("Total reproducciones: " + str(printTotalEvents(events)))
+        printTopGenres(events)
 
     else:
         sys.exit(0)

@@ -104,6 +104,7 @@ def addEvent(analyzer, event):
         addContentFeature(analyzer, event, 'tempo')
         addContentFeature(analyzer, event, 'acousticness')
         addContentFeature(analyzer, event, 'energy')
+        addTime(analyzer, event)
 
 def addTracks(analyzer, event):
     """
@@ -311,6 +312,67 @@ def getGenres(analyzer, key, initialValue, finalValue, option):
         mp.put(genres, str(key), getEventsByRange(analyzer, 'tempo', initialValue, finalValue))
     return genres
 
+def getEventsByTimeRange(analyzer, initialValue, finalValue):
+    """
+    """
+    map = om.newMap('RBT')
+    initialTime = datetime.datetime.strptime(initialValue, '%H:%M:%S').time()
+    finalTime = datetime.datetime.strptime(finalValue, '%H:%M:%S').time()
+    lstevents = om.values(analyzer['time'], initialTime, finalTime)
+    totalevents = 0
+    for lstevents in lt.iterator(lstevents):
+        totalevents += lt.size(lstevents['events'])
+        for event in lt.iterator(lstevents['events']):
+            key = float(event['tempo'])
+            existkey = om.contains(map, key)
+            if existkey:
+                entry = om.get(map, key)
+                value = me.getValue(entry)
+            else:
+                value = newValue(key)
+                om.put(map, key, value)
+            lt.addLast(value['events'], event)
+    return map, totalevents
+
+def getEventsByTempoRange(map, initialValue, finalValue, genre):
+    """
+    """
+    tracks = mp.newMap(maptype='PROBING')
+    totalevents = 0
+    lst = om.values(map, initialValue, finalValue)
+    for lstevents in lt.iterator(lst):
+        totalevents += lt.size(lstevents['events'])
+        for event in lt.iterator(lstevents['events']):
+            track = event['track_id']
+            mp.put(tracks, track, event)
+    totaltracks = mp.size(tracks)
+    tracksids = mp.keySet(tracks)
+    return genre, totalevents, totaltracks, tracksids
+
+def getEventsByGenre(map):
+    """
+    """
+    genres = om.newMap('RBT', compareValuesDescOrder)
+    om.put(genres, getEventsByTempoRange(map, 60.0, 90.0, 'Reggae')[1], 
+        getEventsByTempoRange(map, 60.0, 90.0, 'Reggae'))
+    om.put(genres, getEventsByTempoRange(map, 70.0, 100.0, 'Down-tempo')[1], 
+        getEventsByTempoRange(map, 70.0, 100.0, 'Down-tempo'))
+    om.put(genres, getEventsByTempoRange(map, 90.0, 120.0, 'Chill-out')[1], 
+        getEventsByTempoRange(map, 90.0, 120.0, 'Chill-out'))
+    om.put(genres, getEventsByTempoRange(map, 85.0, 115.0, 'Down-tempo')[1], 
+        getEventsByTempoRange(map, 85.0, 115.0, 'Hip-hop'))
+    om.put(genres, getEventsByTempoRange(map, 120.0, 125.0, 'Jazz and Funk')[1], 
+        getEventsByTempoRange(map, 120.0, 125.0, 'Jazz and Funk'))
+    om.put(genres, getEventsByTempoRange(map, 100.0, 130.0, 'Pop')[1], 
+        getEventsByTempoRange(map, 100.0, 130.0, 'Pop'))
+    om.put(genres, getEventsByTempoRange(map, 60.0, 80.0, 'R&B')[1], 
+        getEventsByTempoRange(map, 60.0, 80.0, 'R&B'))
+    om.put(genres, getEventsByTempoRange(map, 110.0, 140.0, 'Rock')[1], 
+        getEventsByTempoRange(map, 110.0, 140.0, 'Rock'))
+    om.put(genres, getEventsByTempoRange(map, 100.0, 160.0, 'Metal')[1], 
+        getEventsByTempoRange(map, 100.0, 160.0, 'Metal'))
+    return genres
+
 # Funciones de comparación
 
 def compareValues(value1, value2):
@@ -324,3 +386,15 @@ def compareValues(value1, value2):
         return 1
     else:
         return -1
+
+def compareValuesDescOrder(value1, value2):
+    """
+    Compara los valores de una característica
+    de dos eventos en orden descendiente
+    """
+    if (value1 == value2):
+        return 0
+    elif (value1 > value2):
+        return -1
+    else:
+        return 1

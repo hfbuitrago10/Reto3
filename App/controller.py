@@ -125,3 +125,20 @@ def getGenres(analyzer, key, initialValue, finalValue, option):
     Retorna el map de géneros
     """
     return model.getGenres(analyzer, key, initialValue, finalValue, option)
+
+def getEventsByTimeRange(analyzer, initialValue, finalValue):
+    """
+    Retorna el número de eventos en un rango determinado de tiempo en horas,
+    minutos y segundos
+    """
+    return model.getEventsByTimeRange(analyzer, initialValue, finalValue)
+
+def getEventsByTempoRange(map, initialValue, finalValue, genre):
+    """
+    """
+    return model.getEventsByTempoRange(map, initialValue, finalValue, genre)
+
+def getEventsByGenre(map):
+    """
+    """
+    return model.getEventsByGenre(map)
