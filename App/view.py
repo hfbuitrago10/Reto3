@@ -88,6 +88,25 @@ def printFiveRandomTracks(map, feature1, feature2):
         index += 1
     print()
 
+def printGenres(map, genres):
+    """
+    """
+    totalevents = 0
+    for index in range(len(genres)):
+        key = genres[index]
+        entry = mp.get(map, key)
+        value = me.getValue(entry)
+        print("\n--------" + str(key) + "--------")
+        print("Total reproducciones: " + str(value[0]) + " con " + str(value[1]) + " artistas únicos\n")
+        print("-------- Artistas para " + str(key) + "--------")
+        position = 1
+        totalevents += value[0]
+        while position <= 10:
+            artist = lt.getElement(value[2], position)
+            print("Artista " + str(position) + ": " + str(artist))
+            position += 1
+    print("\nTotal reproducciones: " + str(totalevents) + "\n")
+
 # Menú de opciones
 
 def printMenu():
@@ -180,7 +199,11 @@ while True:
         printFiveRandomTracks(tracks[1], 'instrumentalness', 'tempo')
 
     elif int(inputs[0]) == 6:
-        pass
+        print()
+        genreslst = str(input("Ingrese los géneros a consultar: "))
+        genres = genreslst.split(",")
+        genresmap = controller.getGenres(analyzer)
+        printGenres(genresmap, genres)
 
     elif int(inputs[0]) == 7:
         pass
