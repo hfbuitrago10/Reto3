@@ -149,7 +149,7 @@ def printTopGenres(events):
     " reproducciones")
     print()
 
-def printSentimentAnalysis(events):
+def printSentimentAnalysis(analyzer, events):
     """
     Imprime el análisis de sentimientos para el género con
     mayor número de reproducciones
@@ -159,8 +159,8 @@ def printSentimentAnalysis(events):
     values = om.valueSet(genres)
     genre = lt.getElement(values, 1)
     print("-------- Analisis de Sentimientos para " + str(genre[0]) + " --------")
-    print("Total pistas únicas: " + str(genre[2]))
-    print()
+    print("Total pistas únicas: " + str(genre[2]) + "\n")
+    print("-------- Top 10 pistas --------")
 
 # Menú de opciones
 
@@ -281,7 +281,7 @@ while True:
         print("\n-------- Entre " + str(initialValue) + " y " + str(finalValue) + " --------")
         print("Total reproducciones: " + str(printTotalEvents(events)))
         printTopGenres(events)
-        printSentimentAnalysis(events)
+        printSentimentAnalysis(analyzer, events)
 
     else:
         sys.exit(0)

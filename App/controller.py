@@ -45,6 +45,8 @@ def loadData(analyzer):
     de datos
     """
     loadEvents(analyzer)
+    loadHashtags(analyzer)
+    loadSentimentValues(analyzer)
 
 def loadEvents(analyzer):
     """
@@ -63,15 +65,15 @@ def loadHashtags(analyzer):
     """
     tagsfile = cf.data_dir + 'subsamples-small/user_track_hashtag_timestamp-small.csv'
     input_file = csv.DictReader(open(tagsfile, encoding='utf-8'))
-    for hashtag in input_file:
-        model.addHashtag(analyzer, hashtag)
+    for event in input_file:
+        model.addHashtag(analyzer, event)
 
 def loadSentimentValues(analyzer):
     """
     Carga los valores de sentimientos del archivo csv. Por cada valor se
     indica al modelo que debe adicionarlo al analizador
     """
-    sentimentsfile = cf.data_dir + 'subsamples-samll/sentiment_values.csv'
+    sentimentsfile = cf.data_dir + 'subsamples-small/sentiment_values.csv'
     input_file = csv.DictReader(open(sentimentsfile, encoding='utf-8'))
     for sentimentvalue in input_file:
         model.addSentimentValue(analyzer, sentimentvalue)

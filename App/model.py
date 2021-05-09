@@ -173,11 +173,11 @@ def addTime(analyzer, event):
         om.put(map, time, value)
     lt.addLast(value['events'], event)
 
-def addHashtag(analyzer, hashtag):
+def addHashtag(analyzer, event):
     """
     Adiciona un hashtag al map de hashtags
     """
-    mp.put(analyzer['hashtags'], hashtag['hashtag'], hashtag)
+    mp.put(analyzer['hashtags'], event['track_id'], event['hashtag'])
 
 def addSentimentValue(analyzer, sentimentvalue):
     """
@@ -356,7 +356,7 @@ def getEventsByTempoRange(map, initialValue, finalValue, genre):
 
 def getEventsByGenre(map):
     """
-    Adiciona una entrada al map de géneros, donde la llave es el numero de
+    Adiciona una entrada al map de géneros, donde la llave es el número de
     eventos y el valor es una tupla con el género, el número de
     pistas únicas y los id de las pistas. Retorna el map
     de géneros tipo 'RBT'
