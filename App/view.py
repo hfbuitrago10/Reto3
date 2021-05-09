@@ -154,13 +154,25 @@ def printSentimentAnalysis(analyzer, events):
     Imprime el análisis de sentimientos para el género con
     mayor número de reproducciones
     """
+    index = 1
     map = events[0]
     genres = controller.getEventsByGenre(map)
     values = om.valueSet(genres)
     genre = lt.getElement(values, 1)
+    trackslst = genre[3]
+    size = lt.size(trackslst)
+    maphashtags = controller.getHashtagsByTrack(analyzer, trackslst)
     print("-------- Analisis de Sentimientos para " + str(genre[0]) + " --------")
     print("Total pistas únicas: " + str(genre[2]) + "\n")
     print("-------- Top 10 pistas --------")
+    while index <= 10:
+        randomnumber = random.randint(1, size)
+        key = lt.getElement(trackslst, randomnumber)
+        entry = mp.get(maphashtags, key)
+        value = me.getValue(entry)
+        print("Track " + str(index) + ": " + str(key) + " con " + str(value['hashtags']) + " hashtags")
+        index += 1
+    print()
 
 # Menú de opciones
 

@@ -148,3 +148,10 @@ def getEventsByGenre(map):
     Retorna el map tipo 'RBT' de géneros
     """
     return model.getEventsByGenre(map)
+
+def getHashtagsByTrack(analyzer, trackslst):
+    """
+    Retorna el map de pistas con el número de hashtags respectivo para
+    cada pista
+    """
+    return model.getHashtagsByTrack(analyzer, trackslst)

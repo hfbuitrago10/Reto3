@@ -175,13 +175,25 @@ def addTime(analyzer, event):
 
 def addHashtag(analyzer, event):
     """
-    Adiciona un hashtag al map de hashtags
+    Adiciona un hashtag a la lista de hashtags de una pista específica,
+    las pistas se guardan en un map
     """
-    mp.put(analyzer['hashtags'], event['track_id'], event['hashtag'])
+    map = analyzer['hashtags']
+    key = event['track_id']
+    existkey = mp.contains(map, key)
+    if existkey:
+        entry = mp.get(map, key)
+        value = me.getValue(entry)
+    else:
+        value = newValue(key)
+        mp.put(map, key, value)
+    if lt.isPresent(value['events'], event['hashtag']) == 0:
+        lt.addLast(value['events'], event['hashtag'])
 
 def addSentimentValue(analyzer, sentimentvalue):
     """
-    Adiciona el valor promedio vader al map de vaders
+    Adiciona el valor promedio vader al map de vaders para un hashtag
+    específico
     """
     mp.put(analyzer['vaders'], sentimentvalue['hashtag'], sentimentvalue['vader_avg'])
 
@@ -194,6 +206,15 @@ def newValue(value):
     """
     value = {'events': None}
     value['events'] = lt.newList('ARRAY_LIST')
+    return value
+
+def newHashtagValue(value, totalhashtags):
+    """
+    Esta función crea la estructura de valores asociados
+    con una pista específica
+    """
+    value = {'hashtags': None}
+    value['hashtags'] = totalhashtags
     return value
 
 # Funciones de consulta
@@ -381,6 +402,26 @@ def getEventsByGenre(map):
     om.put(genres, getEventsByTempoRange(map, 100.0, 160.0, 'Metal')[1], 
         getEventsByTempoRange(map, 100.0, 160.0, 'Metal'))
     return genres
+
+def getHashtagsByTrack(analyzer, trackslst):
+    """
+    Adiciona una entrada al map, donde la llave es el id de la pista y
+    el valor es el número total de hashtags para esa pista
+    """
+    map = mp.newMap(maptype='PROBING')
+    for track in lt.iterator(trackslst):
+        hashtagentry = mp.get(analyzer['hashtags'], track)
+        hashtags = me.getValue(hashtagentry)
+        totalhashtags = lt.size(hashtags['events'])
+        existtrack = mp.contains(map, track)
+        if existtrack:
+            entry = mp.get(map, track)
+            value = me.getValue(entry)
+        else:
+            value = newHashtagValue(track, totalhashtags)
+            mp.put(map, track, value)
+        value['hashtags'] = totalhashtags
+    return map
 
 # Funciones de comparación
 
