@@ -129,16 +129,20 @@ def getGenres(analyzer, key, initialValue, finalValue, option):
 def getEventsByTimeRange(analyzer, initialValue, finalValue):
     """
     Retorna el número de eventos en un rango determinado de tiempo en horas,
-    minutos y segundos
+    minutos y segundos (%H:%M:%S)
     """
     return model.getEventsByTimeRange(analyzer, initialValue, finalValue)
 
 def getEventsByTempoRange(map, initialValue, finalValue, genre):
     """
+    Retorna el número de eventos, de pistas y los ids de esas pistas
+    en un rango de valores por tempo, adicionalmente retorna el
+    género respectivo para ese rango de tempo
     """
     return model.getEventsByTempoRange(map, initialValue, finalValue, genre)
 
 def getEventsByGenre(map):
     """
+    Retorna el map tipo 'RBT' de géneros
     """
     return model.getEventsByGenre(map)

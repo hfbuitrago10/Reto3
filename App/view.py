@@ -73,7 +73,8 @@ def printLastFiveEvents(analyzer):
 
 def printFiveRandomTracks(map, feature1, feature2):
     """
-    Imprime la información de 5 pistas aleatorias
+    Imprime la información de 5 pistas aleatorias del map
+    seleccionado
     """
     index = 1
     size = mp.size(map)
@@ -91,7 +92,8 @@ def printFiveRandomTracks(map, feature1, feature2):
 
 def printGenres(map, genres):
     """
-    Imprime las reproducciones y los artistas por género
+    Imprime el total de reproducciones y los artistas únicos
+    por género
     """
     totalevents = 0
     for index in range(len(genres)):
@@ -111,6 +113,8 @@ def printGenres(map, genres):
 
 def printTotalEvents(events):
     """
+    Imprime el total de reproducciones para todos los
+    géneros
     """
     index = 1
     map = events[0]
@@ -125,6 +129,9 @@ def printTotalEvents(events):
 
 def printTopGenres(events):
     """
+    Imprime el top de géneros por número de reproducciones,
+    adicionalmente imprime el género con mayor número
+    de reproducciones
     """
     index = 1
     map = events[0]
@@ -137,6 +144,22 @@ def printTopGenres(events):
         tracks = lt.getElement(keys, index)
         print("Top " + str(index) + ": " + str(genre[0]) + " con " + str(tracks) + " reproducciones")
         index += 1
+    print()
+    print("Top género: " + str(lt.getElement(values, 1)[0]) + " con " + str(lt.getElement(keys, 1)) +
+    " reproducciones")
+    print()
+
+def printSentimentAnalysis(events):
+    """
+    Imprime el análisis de sentimientos para el género con
+    mayor número de reproducciones
+    """
+    map = events[0]
+    genres = controller.getEventsByGenre(map)
+    values = om.valueSet(genres)
+    genre = lt.getElement(values, 1)
+    print("-------- Analisis de Sentimientos para " + str(genre[0]) + " --------")
+    print("Total pistas únicas: " + str(genre[2]))
     print()
 
 # Menú de opciones
@@ -258,6 +281,7 @@ while True:
         print("\n-------- Entre " + str(initialValue) + " y " + str(finalValue) + " --------")
         print("Total reproducciones: " + str(printTotalEvents(events)))
         printTopGenres(events)
+        printSentimentAnalysis(events)
 
     else:
         sys.exit(0)

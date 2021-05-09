@@ -314,6 +314,8 @@ def getGenres(analyzer, key, initialValue, finalValue, option):
 
 def getEventsByTimeRange(analyzer, initialValue, finalValue):
     """
+    Retorna el número de eventos y el map de eventos en un rango determinado
+    de tiempo en horas, minutos y segundos (%H:%M:%S)
     """
     map = om.newMap('RBT')
     initialTime = datetime.datetime.strptime(initialValue, '%H:%M:%S').time()
@@ -336,6 +338,9 @@ def getEventsByTimeRange(analyzer, initialValue, finalValue):
 
 def getEventsByTempoRange(map, initialValue, finalValue, genre):
     """
+    Retorna el número de eventos, de pistas y los ids de esas pistas
+    en un rango de valores por tempo, adicionalmente retorna el
+    género respectivo para ese rango de tempo
     """
     tracks = mp.newMap(maptype='PROBING')
     totalevents = 0
@@ -351,6 +356,10 @@ def getEventsByTempoRange(map, initialValue, finalValue, genre):
 
 def getEventsByGenre(map):
     """
+    Adiciona una entrada al map de géneros, donde la llave es el numero de
+    eventos y el valor es una tupla con el género, el número de
+    pistas únicas y los id de las pistas. Retorna el map
+    de géneros tipo 'RBT'
     """
     genres = om.newMap('RBT', compareValuesDescOrder)
     om.put(genres, getEventsByTempoRange(map, 60.0, 90.0, 'Reggae')[1], 
