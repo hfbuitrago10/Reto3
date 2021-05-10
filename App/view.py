@@ -79,7 +79,7 @@ def printFiveRandomTracks(map, feature1, feature2):
     index = 1
     size = mp.size(map)
     keys = mp.keySet(map)
-    print("-------- 5 pistas aleatorias --------")
+    print("-------- 5 pistas únicas aleatorias --------")
     while index <= 5:
         randomnumber = random.randint(1, size)
         key = lt.getElement(keys, randomnumber)
@@ -162,15 +162,19 @@ def printSentimentAnalysis(analyzer, events):
     trackslst = genre[3]
     size = lt.size(trackslst)
     maphashtags = controller.getHashtagsByTrack(analyzer, trackslst)
+    mapvaders = controller.getVaderAverageByTrack(analyzer, trackslst)
     print("-------- Analisis de Sentimientos para " + str(genre[0]) + " --------")
     print("Total pistas únicas: " + str(genre[2]) + "\n")
-    print("-------- Top 10 pistas --------")
+    print("-------- 10 pistas --------")
     while index <= 10:
         randomnumber = random.randint(1, size)
         key = lt.getElement(trackslst, randomnumber)
-        entry = mp.get(maphashtags, key)
-        value = me.getValue(entry)
-        print("Track " + str(index) + ": " + str(key) + " con " + str(value['hashtags']) + " hashtags")
+        entryhashtag = mp.get(maphashtags, key)
+        valuehashtag = me.getValue(entryhashtag)
+        entryvader = mp.get(mapvaders, key)
+        valuevader = me.getValue(entryvader)
+        print("Track " + str(index) + ": " + str(key) + " con " + str(valuehashtag['hashtags']) + " hashtags" +
+        " y vader = " + str(valuevader['vaderaverage']))
         index += 1
     print()
 
@@ -287,8 +291,8 @@ while True:
     elif int(inputs[0]) == 7:
         print()
         print("Ingrese los valores de tiempo")
-        initialValue = str(input("Valor inicial: "))
-        finalValue = str(input("Valor final: "))
+        initialValue = str(input("Valor inicial (HH:MM:SS): "))
+        finalValue = str(input("Valor final (HH:MM:SS): "))
         events = controller.getEventsByTimeRange(analyzer, initialValue, finalValue)
         print("\n-------- Entre " + str(initialValue) + " y " + str(finalValue) + " --------")
         print("Total reproducciones: " + str(printTotalEvents(events)))

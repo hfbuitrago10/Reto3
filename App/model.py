@@ -195,7 +195,17 @@ def addSentimentValue(analyzer, sentimentvalue):
     Adiciona el valor promedio vader al map de vaders para un hashtag
     específico
     """
-    mp.put(analyzer['vaders'], sentimentvalue['hashtag'], sentimentvalue['vader_avg'])
+    map = analyzer['vaders']
+    if sentimentvalue['vader_avg'] != "":
+        key = sentimentvalue['hashtag']
+        existkey = mp.contains(map, key)
+        if existkey:
+            entry = mp.get(map, key)
+            value = me.getValue(entry)
+        else:
+            value = newValue(key)
+            mp.put(map, key, value)
+        value['events'] = sentimentvalue['vader_avg']
 
 # Funciones para creación de datos
 
@@ -210,11 +220,20 @@ def newValue(value):
 
 def newHashtagValue(value, totalhashtags):
     """
-    Esta función crea la estructura de valores asociados
-    con una pista específica
+    Esta función crea la estructura de número de hashtags
+    para una pista específica
     """
     value = {'hashtags': None}
     value['hashtags'] = totalhashtags
+    return value
+
+def newVaderValue(value, vaderaverage):
+    """
+    Esta función crea la estructura de valores promedio
+    de vader para una pista específica
+    """
+    value = {'vaderaverage': None}
+    value['vaderaverage'] = vaderaverage
     return value
 
 # Funciones de consulta
@@ -359,8 +378,8 @@ def getEventsByTimeRange(analyzer, initialValue, finalValue):
 
 def getEventsByTempoRange(map, initialValue, finalValue, genre):
     """
-    Retorna el número de eventos, de pistas y los ids de esas pistas
-    en un rango de valores por tempo, adicionalmente retorna el
+    Retorna el número de eventos, de pistas y los ids de esas pistas en
+    un rango de valores por tempo, adicionalmente retorna el
     género respectivo para ese rango de tempo
     """
     tracks = mp.newMap(maptype='PROBING')
@@ -423,6 +442,38 @@ def getHashtagsByTrack(analyzer, trackslst):
         value['hashtags'] = totalhashtags
     return map
 
+def getVaderAverageByTrack(analyzer, trackslst):
+    """
+    Adiciona una entrada al map, donde la llave es el id de la pista y
+    el valor es el vader promedio de los hashtags para esa pista
+    """
+    map = mp.newMap(maptype='PROBING')
+    for track in lt.iterator(trackslst):
+        hashtagentry = mp.get(analyzer['hashtags'], track)
+        hashtags = me.getValue(hashtagentry)
+        for hashtag in lt.iterator(hashtags['events']):
+            totalvaders = 0
+            count = 0
+            existhashtag = mp.contains(analyzer['vaders'], hashtag.lower())
+            if existhashtag:
+                vaderentry = mp.get(analyzer['vaders'], hashtag.lower())
+                vader = me.getValue(vaderentry)['events']
+                totalvaders += float(vader)
+                count += 1
+            if count != 0:
+                vaderaverage = totalvaders/count
+            else:
+                vaderaverage = 0
+        existtrack = mp.contains(map, track)
+        if existtrack:
+            entry = mp.get(map, track)
+            value = me.getValue(entry)
+        else:
+            value = newVaderValue(track, vaderaverage)
+            mp.put(map, track, value)
+        value['vaderaverage'] = vaderaverage
+    return map
+
 # Funciones de comparación
 
 def compareValues(value1, value2):
@@ -440,7 +491,7 @@ def compareValues(value1, value2):
 def compareValuesDescOrder(value1, value2):
     """
     Compara los valores de una característica
-    de dos eventos en orden descendiente
+    de dos eventos en orden descendente
     """
     if (value1 == value2):
         return 0

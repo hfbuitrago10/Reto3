@@ -155,3 +155,10 @@ def getHashtagsByTrack(analyzer, trackslst):
     cada pista
     """
     return model.getHashtagsByTrack(analyzer, trackslst)
+
+def getVaderAverageByTrack(analyzer, trackslst):
+    """
+    Retorna el map de pistas con el vader promedio de los hashtags para
+    esa pista
+    """
+    return model.getVaderAverageByTrack(analyzer, trackslst)
