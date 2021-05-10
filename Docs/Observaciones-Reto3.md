@@ -14,7 +14,7 @@
 | OS | MacOS Big Sur 11.3.1 |
 
 ## Tiempo :stopwatch:
-Para la recolección de datos se promedió el tiempo de ejecución para cada requerimiento después de ser ejecutados 5 veces. La siguiente tabla muestra los resultados de las pruebas.
+Para la recolección de datos se promedió el tiempo de ejecución para cada requerimiento después de ser ejecutados 5 veces. La siguiente tabla muestra los resultados de las pruebas para el reto 3.
 
 |  | Small | 5% | 10% |
 | --- | --- | --- | --- |
@@ -23,7 +23,9 @@ Para la recolección de datos se promedió el tiempo de ejecución para cada req
 | __Requerimiento 2__ | 563.585 [ms] | 6033.646 [ms] | 13125.987 [ms] |
 | __Requerimiento 3__ | 195.837 [ms] | 1432.374 [ms] | 2744.861 [ms] |
 | __Requerimiento 4__ | 6468.104 [ms] | 39935.196 [ms] | 77830.861 [ms] |
-| __Requerimiento 5__ | [ms] | [ms] | [ms] |
+| __Requerimiento 5__ | 4651.850 [ms] | 30431.173 [ms] | 61372.849 [ms] |
+
+Se observa que el tiempo de ejecución para cada requerimiento aumenta de forma aproximadamente lineal conforme aumenta el tamaño de la muestra de datos.
 
 ## Memoria :file_folder:
 Para la recolección de datos se promedió la memoria asignada para cada requerimiento después de ser ejecutado 5 veces. La siguiente tabla muestra los resultados de las pruebas para el reto 3.
@@ -32,18 +34,18 @@ Para la recolección de datos se promedió la memoria asignada para cada requeri
 | --- | --- | --- | --- |
 | __Carga de datos__ | 326872.262 [kB] | 1961845.520 [kB] | 3542651.942 [kB] |
 | __Requerimiento 1__ | 431.154 [kB] | 1227.912 [kB] | 1538.756 [kB] |
-| __Requerimiento 2__ | 1317.789 [kB] | 5186.023 [kB] | 5186.539 [kB] |
+| __Requerimiento 2__ | 1317.789 [kB] | 5186.023 [kB] | 6195.539 [kB] |
 | __Requerimiento 3__ | 36.938 [kB] | 48.925 [kB] | 69.183 [kB] |
 | __Requerimiento 4__ | 8999.691 [kB] | 22002.157 [kB] | 26879.821 [kB] |
-| __Requerimiento 5__ | [kB] | [kB] | [kB] |
+| __Requerimiento 5__ | 21915.063 [kB] | 59301.159 [kB] | 72531.391 [kB] |
 
 ## Complejidad :chart_with_upwards_trend:
 Se realizó un análisis de complejidad en el peor caso para cada requerimiento. La siguiente tabla muestra la complejidad temporal de cada requerimiento para el reto 3.
 
 |  | Reto 3 |
 | --- | --- |
-| __Requerimiento 1__ |  |
-| __Requerimiento 2__ |  |
-| __Requerimiento 3__ |  |
-| __Requerimiento 4__ |  |
-| __Requerimiento 5__ |  |
+| __Requerimiento 1__ | O(n) |
+| __Requerimiento 2__ | O(n) |
+| __Requerimiento 3__ | O(n) |
+| __Requerimiento 4__ | O(n) |
+| __Requerimiento 5__ | O(n) |
